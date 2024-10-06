@@ -11,8 +11,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 
-// Register page
+// Home page
 app.get("/", (req, res) => {
+  res.render("index");
+});
+
+// Register page
+app.get("/register", (req, res) => {
   res.render("register");
 });
 
@@ -30,11 +35,7 @@ app.post("/register", async (req, res) => {
       phoneNumber,
       email,
     });
-    res.json({
-      status: 200,
-      message: "User created successfully",
-      data: createUser,
-    });
+    res.redirect("/login");
   }
 });
 
@@ -50,7 +51,7 @@ app.post("/login", async (req, res) => {
   if (user) {
     res.send("Login successful");
   } else {
-    res.send("Invalid credentials");
+    res.send("Invalid Email");
   }
 });
 
