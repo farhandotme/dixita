@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   age: {
-    type: Number,
+    type: Date,
     required: true,
   },
   gender: {
@@ -22,6 +22,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+}, {timestamps: true});
 
 module.exports = mongoose.model("User", userSchema);
