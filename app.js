@@ -3,7 +3,9 @@ const app = express();
 const path = require("path");
 const connectionDb = require("./db/connectionDb");
 const userModel = require("./models/userModel");
-const dotenv = require("dotenv").config({ path: "./.env" });
+const dotenv = require("dotenv")
+
+dotenv.config({ path: "./.env" });
 
 connectionDb();
 app.use(express.json());
@@ -24,6 +26,9 @@ app.get("/register", (req, res) => {
 // Register
 app.post("/register", async (req, res) => {
   let { name, age, gender, phoneNumber, email } = req.body;
+  if(!name || !age || !gender || !phoneNumber || !email) {
+    res.send("Please fill all the fields");
+  }
   let user = await userModel.findOne({ email });
   if (user) {
     res.send("Email already exists");
@@ -57,8 +62,8 @@ app.post("/login", async (req, res) => {
 
 
 // Port
-const port = process.env.PORT || 3000;
-app.listen(3000, (err) => {
+const port = process.env.PORT || 4000;
+app.listen(port, (err) => {
   if (err) {
     console.log(err);
   }
