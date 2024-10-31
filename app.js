@@ -4,6 +4,8 @@ const path = require("path");
 const connectionDb = require("./db/connectionDb");
 const userModel = require("./models/userModel");
 const dotenv = require("dotenv")
+const session = require("express-session");
+const flash = require("connect-flash");
 
 dotenv.config({ path: "./.env" });
 
@@ -12,6 +14,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
+app.use(session({
+  secret: "secret",
+  resave: false,
+  saveUninitialized: false,
+}));
+app.use(flash());
+
 
 // Home page
 app.get("/", (req, res) => {
@@ -20,18 +29,21 @@ app.get("/", (req, res) => {
 
 // Register page
 app.get("/register", (req, res) => {
-  res.render("register");
+  let errors = req.flash("error");
+  res.render("register" , {errors});
 });
 
 // Register
 app.post("/register", async (req, res) => {
   let { name, age, gender, phoneNumber, email } = req.body;
   if(!name || !age || !gender || !phoneNumber || !email) {
-    res.send("Please fill all the fields");
+    req.flash("error", "All fields are required");
+    return res.redirect("/register");
   }
   let user = await userModel.findOne({ email });
   if (user) {
-    res.send("Email already exists");
+    req.flash("error", "User already exists");
+    return res.redirect("/register");
   } else {
     let createUser = await userModel.create({
       name,
@@ -40,13 +52,15 @@ app.post("/register", async (req, res) => {
       phoneNumber,
       email,
     });
+    req.flash("success", "User created successfully");
     res.redirect("/login");
   }
 });
 
 // Login page
 app.get("/login", (req, res) => {
-  res.render("login");
+  let success = req.flash("success");
+  res.render("login", {success});
 });
 
 // Login
@@ -67,5 +81,5 @@ app.listen(port, (err) => {
   if (err) {
     console.log(err);
   }
-  console.log(`Server started on port localhost:${port}`);
+  console.log(`Server started on port http://localhost:${port}`);
 });

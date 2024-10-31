@@ -24,6 +24,18 @@
       method="post"
       class="relative bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
     >
+      <!-- Alert -->
+
+      <% if(errors.length > 0) { errors.forEach((error) => { %>
+      <div
+        class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4"
+        role="alert"
+      >
+        <p class="font-bold">Be Warned</p>
+        <p><%= error %>.</p>
+      </div>
+      <% }); } %>
+
       <h1 class="text-2xl font-semibold text-blue-600 mb-6 text-center">
         Register
       </h1>
