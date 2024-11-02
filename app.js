@@ -6,6 +6,9 @@ const userModel = require("./models/userModel");
 const dotenv = require("dotenv")
 const session = require("express-session");
 const flash = require("connect-flash");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const isloggedin = require("./utils/isLoggedin");
 
 dotenv.config({ path: "./.env" });
 
@@ -20,7 +23,7 @@ app.use(session({
   saveUninitialized: false,
 }));
 app.use(flash());
-
+app.use(cookieParser());
 
 // Home page
 app.get("/", (req, res) => {
@@ -58,9 +61,10 @@ app.post("/register", async (req, res) => {
 });
 
 // Login page
-app.get("/login", (req, res) => {
+app.get("/login",  (req, res) => {
   let success = req.flash("success");
-  res.render("login", {success});
+  let errors = req.flash("error");
+  res.render("login", {success, errors});
 });
 
 // Login
@@ -68,12 +72,32 @@ app.post("/login", async (req, res) => {
   let { email } = req.body;
   let user = await userModel.findOne({ email });
   if (user) {
-    res.send("Login successful");
+    let token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      httpOnly: true,
+    });
+    res.redirect("/home");
   } else {
-    res.send("Invalid Email");
+    req.flash("error", "User does not exist");
+    res.redirect("/login");
   }
 });
 
+//HOME PAGE
+
+app.get("/home", isloggedin, (req, res) => {
+  
+  res.render("homepage");
+});
+
+// Logout
+app.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.redirect("/login");
+});
 
 // Port
 const port = process.env.PORT || 4000;
