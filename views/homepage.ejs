@@ -3,9 +3,241 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Medox Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Material Icons for icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
   </head>
-  <body>
-    <h1>homepage</h1>
+  <body class="bg-gray-100">
+    <div class="dashboard-container flex">
+      <!-- Sidebar with styled options -->
+      <div class="sidebar bg-gray-900 text-white w-64 h-screen p-6 space-y-4">
+        <h1 class="text-2xl font-bold text-center mb-8">Medox Dashboard</h1>
+        <div class="space-y-2">
+          <div
+            class="option flex items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
+            onclick="showSection('user', this)"
+          >
+            <span class="material-icons mr-4">person</span>
+            <span>USER</span>
+          </div>
+          <div
+            class="option flex items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
+            onclick="showSection('members', this)"
+          >
+            <span class="material-icons mr-4">groups</span>
+            <span>MEMBERS</span>
+          </div>
+          <div
+            class="option flex items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
+            onclick="showSection('addMember', this)"
+          >
+            <span class="material-icons mr-4">person_add</span>
+            <span>ADD MEMBER</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main content area -->
+      <div class="content-area w-full p-8">
+        <!-- USER section -->
+        <div id="user" class="content-section">
+          <h2 class="text-2xl font-semibold mb-4">Hello , <%= user.name %></h2>
+
+          <h3 class="text-xl font-medium">Personal Information</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="block">Name:</label>
+              <input
+                type="text"
+                id="first-name"
+                name="first-name"
+                required
+                disabled
+                value="<%= user.name %>"
+                class="w-full p-2 border rounded"
+              />
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4">
+            <div>
+              <label for="age" class="block">Age:</label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                required
+                disabled
+                value="<%= user.age %>"
+                class="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label for="gender" class="block">Gender:</label>
+              <input
+                type="text"
+                name="gender"
+                id="gender"
+                disabled
+                class="w-full p-2 border rounded"
+                value="<%= user.gender %>"
+              />
+            </div>
+            <div>
+              <label for="phone" class="block">Phone Number:</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                required
+                disabled
+                value="<%= user.phoneNumber %>"
+                class="w-full p-2 border rounded"
+              />
+            </div>
+          </div>
+          <div>
+            <label for="email" class="block">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              disabled
+              value="<%= user.email %>"
+              class="w-full p-2 border rounded"
+            />
+          </div>
+
+          <h3 class="text-xl mt-4 font-medium">Medication Information</h3>
+          <table
+            id="medication-table"
+            class="w-full text-left border rounded-lg"
+          >
+            <thead>
+              <tr class="bg-blue-800 text-white">
+                <th class="p-2">Condition</th>
+                <th class="p-2">Medicine</th>
+                <th class="p-2">Dose</th>
+                <th class="p-2">Time</th>
+                <th class="p-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% medications.forEach((medications) => { %>
+              <tr>
+                <td class="p-2"><%= medications.condition %></td>
+                <td class="p-2"><%= medications.medicine %></td>
+                <td class="p-2"><%= medications.dose %></td>
+                <td class="p-2"><%= medications.time %></td>
+                <td class="p-2">
+                  <button
+                    class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <form action="/medication" method="post" class="space-y-4">
+            <div class="grid grid-cols-4 gap-4 mt-4">
+              <div>
+                <label for="condition" class="block">Condition:</label>
+                <input
+                  type="text"
+                  id="condition"
+                  name="condition"
+                  class="w-full p-2 border rounded"
+                />
+              </div>
+              <div>
+                <label for="med-name" class="block">Medicine:</label>
+                <input
+                  type="text"
+                  id="med-name"
+                  name="medicine"
+                  class="w-full p-2 border rounded"
+                />
+              </div>
+              <div>
+                <label for="dose" class="block">Dose:</label>
+                <input
+                  type="text"
+                  id="dose"
+                  name="dose"
+                  class="w-full p-2 border rounded"
+                />
+              </div>
+              <div>
+                <label for="time" class="block">Time:</label>
+                <input
+                  type="text"
+                  id="time"
+                  name="time"
+                  class="w-full p-2 border rounded"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              class="mt-4 bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700"
+            >
+              Add Medication
+            </button>
+          </form>
+        </div>
+
+        <!-- MEMBERS section -->
+        <div id="members" class="content-section hidden">
+          <h2 class="text-2xl font-semibold mb-4">Members List</h2>
+          <ul class="list-disc ml-6">
+            <li>Member 1</li>
+            <li>Member 2</li>
+            <li>Member 3</li>
+          </ul>
+        </div>
+
+        <!-- ADD MEMBER form section -->
+        <div id="addMember" class="content-section hidden">
+          <h2 class="text-2xl font-semibold mb-4">Add New Member</h2>
+          <form class="space-y-4">
+            <div>
+              <label for="name" class="block">Name:</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                class="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label for="condition" class="block">Condition:</label>
+              <input
+                type="text"
+                id="condition"
+                name="condition"
+                class="w-full p-2 border rounded"
+              />
+            </div>
+            <button
+              type="submit"
+              class="bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700"
+            >
+              Add Member
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

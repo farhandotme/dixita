@@ -9,6 +9,7 @@ const flash = require("connect-flash");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const isloggedin = require("./utils/isLoggedin");
+const medicalInfo = require("./models/medicalInfo");
 
 dotenv.config({ path: "./.env" });
 
@@ -88,10 +89,33 @@ app.post("/login", async (req, res) => {
 
 //HOME PAGE
 
-app.get("/home", isloggedin, (req, res) => {
+app.get("/home", isloggedin, async (req, res) => {
+  let userId = req.user = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+  const user = await userModel.findById(userId.id).select("-password");
+
+  const medications = await medicalInfo
+    .find({ user: user._id })
+    .populate("user", "name")
+    .sort({ createdAt: -1 });
+  console.log(medications);
   
-  res.render("homepage");
+  res.render("homepage", { user, medications });
 });
+
+
+app.post("/medication", isloggedin, async (req, res) => {
+  let { condition, medicine, dose, time } = req.body;
+  let userId = req.user = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+  const user = await userModel.findById(userId.id).select("-password");
+  const newMedication = await medicalInfo.create({
+    condition,
+    medicine,
+    dose,
+    time,
+    user: user._id,
+  });
+  res.redirect("/home");
+})
 
 // Logout
 app.get("/logout", (req, res) => {
