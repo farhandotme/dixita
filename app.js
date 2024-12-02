@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 const connectionDb = require("./db/connectionDb");
 const userModel = require("./models/userModel");
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
 const session = require("express-session");
 const flash = require("connect-flash");
 const cookieParser = require("cookie-parser");
@@ -18,11 +18,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
-app.use(session({
-  secret: "secret",
-  resave: false,
-  saveUninitialized: false,
-}));
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 app.use(flash());
 app.use(cookieParser());
 
@@ -34,13 +36,13 @@ app.get("/", (req, res) => {
 // Register page
 app.get("/register", (req, res) => {
   let errors = req.flash("error");
-  res.render("register" , {errors});
+  res.render("register", { errors });
 });
 
 // Register
 app.post("/register", async (req, res) => {
   let { name, age, gender, phoneNumber, email } = req.body;
-  if(!name || !age || !gender || !phoneNumber || !email) {
+  if (!name || !age || !gender || !phoneNumber || !email) {
     req.flash("error", "All fields are required");
     return res.redirect("/register");
   }
@@ -62,10 +64,10 @@ app.post("/register", async (req, res) => {
 });
 
 // Login page
-app.get("/login",  (req, res) => {
+app.get("/login", (req, res) => {
   let success = req.flash("success");
   let errors = req.flash("error");
-  res.render("login", {success, errors});
+  res.render("login", { success, errors });
 });
 
 // Login
@@ -87,25 +89,29 @@ app.post("/login", async (req, res) => {
   }
 });
 
-//HOME PAGE
+// HOME PAGE
 
 app.get("/home", isloggedin, async (req, res) => {
-  let userId = req.user = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+  let userId = (req.user = jwt.verify(
+    req.cookies.token,
+    process.env.JWT_SECRET
+  ));
   const user = await userModel.findById(userId.id).select("-password");
 
   const medications = await medicalInfo
     .find({ user: user._id })
     .populate("user", "name")
     .sort({ createdAt: -1 });
-  console.log(medications);
-  
+
   res.render("homepage", { user, medications });
 });
 
-
 app.post("/medication", isloggedin, async (req, res) => {
   let { condition, medicine, dose, time } = req.body;
-  let userId = req.user = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+  let userId = (req.user = jwt.verify(
+    req.cookies.token,
+    process.env.JWT_SECRET
+  ));
   const user = await userModel.findById(userId.id).select("-password");
   const newMedication = await medicalInfo.create({
     condition,
@@ -115,7 +121,14 @@ app.post("/medication", isloggedin, async (req, res) => {
     user: user._id,
   });
   res.redirect("/home");
-})
+});
+
+app.get("/delete/:_id", isloggedin, async (req, res) => {
+  let id = req.params._id;
+  // console.log(id);
+  let user = await medicalInfo.findByIdAndDelete(id);
+  res.redirect("/home");
+});
 
 // Logout
 app.get("/logout", (req, res) => {

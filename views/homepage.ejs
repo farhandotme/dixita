@@ -132,17 +132,17 @@
             </thead>
             <tbody>
               <% medications.forEach((medications) => { %>
-              <tr>
+              <tr class="bg-gray-300">
                 <td class="p-2"><%= medications.condition %></td>
                 <td class="p-2"><%= medications.medicine %></td>
                 <td class="p-2"><%= medications.dose %></td>
                 <td class="p-2"><%= medications.time %></td>
                 <td class="p-2">
-                  <button
+                  <a href="/delete/<%= medications._id %>"
                     class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
                   >
                     Delete
-                  </button>
+                  </a>
                 </td>
               </tr>
               <% }) %>
@@ -239,5 +239,18 @@
         </div>
       </div>
     </div>
+    <script>
+      function showSection(sectionId, element) {
+        document.querySelectorAll(".content-section").forEach((section) => {
+          section.classList.add("hidden");
+        });
+        document.getElementById(sectionId).classList.remove("hidden");
+
+        document.querySelectorAll(".sidebar .option").forEach((option) => {
+          option.classList.remove("bg-gray-700", "text-white");
+        });
+        element.classList.add("bg-gray-700", "text-white");
+      }
+    </script>
   </body>
 </html>
