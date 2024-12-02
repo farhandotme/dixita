@@ -10,6 +10,7 @@ const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const isloggedin = require("./utils/isLoggedin");
 const medicalInfo = require("./models/medicalInfo");
+const memberModel = require("./models/memberModel");
 
 dotenv.config({ path: "./.env" });
 
@@ -90,7 +91,6 @@ app.post("/login", async (req, res) => {
 });
 
 // HOME PAGE
-
 app.get("/home", isloggedin, async (req, res) => {
   let userId = (req.user = jwt.verify(
     req.cookies.token,
@@ -102,11 +102,20 @@ app.get("/home", isloggedin, async (req, res) => {
     .find({ user: user._id })
     .populate("user", "name")
     .sort({ createdAt: -1 });
-
   res.render("homepage", { user, medications });
 });
 
+// Add medication
 app.post("/medication", isloggedin, async (req, res) => {
+  if (
+    !req.body.condition ||
+    !req.body.medicine ||
+    !req.body.dose ||
+    !req.body.time
+  ) {
+    req.flash("error", "All fields are required");
+    return res.redirect("/home");
+  }
   let { condition, medicine, dose, time } = req.body;
   let userId = (req.user = jwt.verify(
     req.cookies.token,
@@ -125,8 +134,25 @@ app.post("/medication", isloggedin, async (req, res) => {
 
 app.get("/delete/:_id", isloggedin, async (req, res) => {
   let id = req.params._id;
-  // console.log(id);
   let user = await medicalInfo.findByIdAndDelete(id);
+  res.redirect("/home");
+});
+
+app.post("/addMember", isloggedin, async (req, res) => {
+  const { name, age, gender, phoneNumber, email } = req.body;
+  let userId = (req.user = jwt.verify(
+    req.cookies.token,
+    process.env.JWT_SECRET
+  ));
+  const user = await userModel.findById(userId.id).select("-password");
+  const member = await memberModel.create({
+    user: user._id,
+    name,
+    age,
+    gender,
+    phoneNumber,
+    email,
+  });
   res.redirect("/home");
 });
 

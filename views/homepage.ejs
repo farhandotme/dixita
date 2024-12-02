@@ -18,29 +18,38 @@
   <body class="bg-gray-100">
     <div class="dashboard-container flex">
       <!-- Sidebar with styled options -->
-      <div class="sidebar bg-gray-900 text-white w-64 h-screen p-6 space-y-4">
-        <h1 class="text-2xl font-bold text-center mb-8">Medox Dashboard</h1>
-        <div class="space-y-2">
-          <div
-            class="option flex items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
-            onclick="showSection('user', this)"
-          >
-            <span class="material-icons mr-4">person</span>
-            <span>USER</span>
+      <div class="flex flex-col justify-center items-start">
+        <div class="sidebar bg-gray-900 text-white w-64 h-screen p-6 space-y-4">
+          <h1 class="text-2xl font-bold text-center mb-8">Medox Dashboard</h1>
+          <div class="space-y-2">
+            <div
+              class="option flex items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
+              onclick="showSection('user', this)"
+            >
+              <span class="material-icons mr-4">person</span>
+              <span>USER</span>
+            </div>
+            <div
+              class="option flex items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
+              onclick="showSection('members', this)"
+            >
+              <span class="material-icons mr-4">groups</span>
+              <span>MEMBERS</span>
+            </div>
+            <div
+              class="option flex items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
+              onclick="showSection('addMember', this)"
+            >
+              <span class="material-icons mr-4">person_add</span>
+              <span>ADD MEMBER</span>
+            </div>
           </div>
-          <div
-            class="option flex items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
-            onclick="showSection('members', this)"
-          >
-            <span class="material-icons mr-4">groups</span>
-            <span>MEMBERS</span>
-          </div>
-          <div
-            class="option flex items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
-            onclick="showSection('addMember', this)"
-          >
-            <span class="material-icons mr-4">person_add</span>
-            <span>ADD MEMBER</span>
+          <div>
+            <a
+              class="flex mt-80 items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
+              href="/logout"
+              ><span href="/logout" class="material-icons mr-4">logout</span> Logout</a
+            >
           </div>
         </div>
       </div>
@@ -70,12 +79,12 @@
             <div>
               <label for="age" class="block">Age:</label>
               <input
-                type="number"
+                type="text"
                 id="age"
                 name="age"
                 required
                 disabled
-                value="<%= user.age %>"
+                value="<%= new Date(user.age).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>"
                 class="w-full p-2 border rounded"
               />
             </div>
@@ -138,7 +147,8 @@
                 <td class="p-2"><%= medications.dose %></td>
                 <td class="p-2"><%= medications.time %></td>
                 <td class="p-2">
-                  <a href="/delete/<%= medications._id %>"
+                  <a
+                    href="/delete/<%= medications._id %>"
                     class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
                   >
                     Delete
@@ -207,34 +217,78 @@
         </div>
 
         <!-- ADD MEMBER form section -->
-        <div id="addMember" class="content-section hidden">
-          <h2 class="text-2xl font-semibold mb-4">Add New Member</h2>
-          <form class="space-y-4">
+        <div
+          id="addMember"
+          class="content-section hidden flex flex-col justify-center"
+        >
+          <form action="/addMember" method="post">
+            <h3 class="text-xl font-medium">Personal Information</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="name" class="block">Name:</label>
+                <input
+                  type="text"
+                  id="first-name"
+                  name="name"
+                  required
+                  class="w-full p-2 border rounded"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+              <div>
+                <label for="age" class="block">Age:</label>
+                <input
+                  type="date"
+                  id="age"
+                  name="age"
+                  required
+                  class="w-full p-2 border rounded"
+                />
+              </div>
+              <div class="">
+                <label for="gender" class="block"> Gender </label>
+                <select
+                  name="gender"
+                  id="gender"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option disabled selected>Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label for="phone" class="block">Phone Number:</label>
+                <input
+                  type="number"
+                  id="phone"
+                  name="phoneNumber"
+                  required
+                  class="w-full p-2 border rounded"
+                />
+              </div>
+            </div>
             <div>
-              <label for="name" class="block">Name:</label>
+              <label for="email" class="block">Email:</label>
               <input
-                type="text"
-                id="name"
-                name="name"
+                type="email"
+                id="email"
+                name="email"
                 required
                 class="w-full p-2 border rounded"
               />
             </div>
             <div>
-              <label for="condition" class="block">Condition:</label>
-              <input
-                type="text"
-                id="condition"
-                name="condition"
-                class="w-full p-2 border rounded"
-              />
+              <button
+                class="mt-4 bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700"
+                type="submit"
+              >
+                Add Member
+              </button>
             </div>
-            <button
-              type="submit"
-              class="bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700"
-            >
-              Add Member
-            </button>
           </form>
         </div>
       </div>
