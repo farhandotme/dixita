@@ -5,6 +5,7 @@ const memberSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     name: {
       type: String,
@@ -12,7 +13,6 @@ const memberSchema = new mongoose.Schema(
     },
     proxy: {
       type: String,
-      required: true,
     },
     age: {
       type: Date,
@@ -20,6 +20,7 @@ const memberSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
+      
       required: true,
     },
     phoneNumber: {
@@ -30,6 +31,12 @@ const memberSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    medicalInfo: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "MemberMedical",
+      },
+    ],
   },
   { timestamps: true }
 );

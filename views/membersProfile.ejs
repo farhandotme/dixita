@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Member Profile</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 p-10">
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded p-6">
+      <!-- Member Information -->
+      <h1 class="text-2xl font-semibold mb-4">
+        Member Profile: <%= member.name %>
+      </h1>
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div>
+          <label for="name" class="block">Name:</label>
+          <input
+            type="text"
+            disabled
+            value="<%= member.name %>"
+            class="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label for="proxy" class="block">Proxy:</label>
+          <input
+            type="text"
+            disabled
+            value="<%= member.proxy %>"
+            class="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label for="age" class="block">Age:</label>
+          <input
+            type="text"
+            disabled
+            value="<%= new Date(member.age).toLocaleDateString('en-US') %>"
+            class="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label for="gender" class="block">Gender:</label>
+          <input
+            type="text"
+            disabled
+            value="<%= member.gender %>"
+            class="w-full p-2 border rounded"
+          />
+        </div>
+      </div>
+
+      <!-- Medication Information -->
+      <h2 class="text-xl font-medium mb-4">Medical Conditions</h2>
+      <table class="table-auto w-full text-left border">
+        <thead>
+          <tr class="bg-blue-800 text-white">
+            <th class="p-2">Condition</th>
+            <th class="p-2">Medicine</th>
+            <th class="p-2">Dose</th>
+            <th class="p-2">Time</th>
+            <th class="p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (member.medicalInfo.length > 0) { %> <%
+          member.medicalInfo.forEach((med) => { %>
+          <tr>
+            <td class="p-2"><%= med.condition %></td>
+            <td class="p-2"><%= med.medicine %></td>
+            <td class="p-2"><%= med.dose %></td>
+            <td class="p-2"><%= med.time %></td>
+            <td class="p-2">
+              <a
+                href="/delete/<%= med._id %>"
+                class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+                >Delete</a
+              >
+            </td>
+          </tr>
+          <% }); %> <% } else { %>
+          <tr>
+            <td colspan="5" class="text-center text-gray-600 p-4">
+              No medical records found.
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+
+      <!-- Add Medication Form -->
+      <h2 class="text-xl font-medium mt-6 mb-4">Add Medical Condition</h2>
+      <form action="/memberMedication" method="post" class="space-y-4">
+        <input type="hidden" name="memberId" value="<%= member._id %>" />
+        <div class="grid grid-cols-4 gap-4">
+          <div>
+            <label for="condition" class="block">Condition:</label>
+            <input
+              type="text"
+              id="condition"
+              name="condition"
+              class="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div>
+            <label for="med-name" class="block">Medicine:</label>
+            <input
+              type="text"
+              id="med-name"
+              name="medicine"
+              class="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div>
+            <label for="dose" class="block">Dose:</label>
+            <input
+              type="text"
+              id="dose"
+              name="dose"
+              class="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div>
+            <label for="time" class="block">Time:</label>
+            <input
+              type="text"
+              id="time"
+              name="time"
+              class="w-full p-2 border rounded"
+              required
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="mt-4 bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-700"
+        >
+          Add Medical Condition
+        </button>
+      </form>
+      <div class="mt-6">
+        <a class="text-blue-800 hover:underline" href="/home">Back to Home</a>
+      </div>
+    </div>
+  </body>
+</html>
