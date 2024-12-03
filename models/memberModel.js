@@ -10,6 +10,10 @@ const memberSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    proxy: {
+      type: String,
+      required: true,
+    },
     age: {
       type: Date,
       required: true,

@@ -48,7 +48,8 @@
             <a
               class="flex mt-80 items-center py-3 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition duration-200"
               href="/logout"
-              ><span href="/logout" class="material-icons mr-4">logout</span> Logout</a
+              ><span href="/logout" class="material-icons mr-4">logout</span>
+              Logout</a
             >
           </div>
         </div>
@@ -209,11 +210,27 @@
         <!-- MEMBERS section -->
         <div id="members" class="content-section hidden">
           <h2 class="text-2xl font-semibold mb-4">Members List</h2>
-          <ul class="list-disc ml-6">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-          </ul>
+          <div class="container mx-auto">
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+            >
+              <div class="bg-white rounded-lg shadow-md p-6">
+                <h2
+                  class="text-lg font-semibold text-gray-800 text-center mt-4"
+                >
+                  John Doe
+                </h2>
+                <p class="text-gray-600 text-center">Web Developer</p>
+                <div class="mt-4 text-center">
+                  <button
+                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                  >
+                    View Profile
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- ADD MEMBER form section -->
@@ -230,6 +247,18 @@
                   type="text"
                   id="first-name"
                   name="name"
+                  required
+                  class="w-full p-2 border rounded"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="proxy" class="block">Proxy Name:</label>
+                <input
+                  type="text"
+                  id="proxy"
+                  name="proxy"
                   required
                   class="w-full p-2 border rounded"
                 />

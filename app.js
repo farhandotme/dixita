@@ -29,18 +29,18 @@ app.use(
 app.use(flash());
 app.use(cookieParser());
 
-// Home page
+// -------------------Home page
 app.get("/", (req, res) => {
   res.render("index");
 });
 
-// Register page
+// ---------------------Register page
 app.get("/register", (req, res) => {
   let errors = req.flash("error");
   res.render("register", { errors });
 });
 
-// Register
+// -------------------------------------Register
 app.post("/register", async (req, res) => {
   let { name, age, gender, phoneNumber, email } = req.body;
   if (!name || !age || !gender || !phoneNumber || !email) {
@@ -64,14 +64,14 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// Login page
+//--------------------------- Login page
 app.get("/login", (req, res) => {
   let success = req.flash("success");
   let errors = req.flash("error");
   res.render("login", { success, errors });
 });
 
-// Login
+// ----------------------------------Login
 app.post("/login", async (req, res) => {
   let { email } = req.body;
   let user = await userModel.findOne({ email });
@@ -90,7 +90,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// HOME PAGE
+// -----------------------------------HOME PAGE
 app.get("/home", isloggedin, async (req, res) => {
   let userId = (req.user = jwt.verify(
     req.cookies.token,
@@ -102,10 +102,11 @@ app.get("/home", isloggedin, async (req, res) => {
     .find({ user: user._id })
     .populate("user", "name")
     .sort({ createdAt: -1 });
-  res.render("homepage", { user, medications });
+
+  res.render("homepage", { user, medications, members });
 });
 
-// Add medication
+//------------------------------------ Add medication
 app.post("/medication", isloggedin, async (req, res) => {
   if (
     !req.body.condition ||
@@ -132,6 +133,8 @@ app.post("/medication", isloggedin, async (req, res) => {
   res.redirect("/home");
 });
 
+//--------------------------------------------------GET MEMBERS
+
 app.get("/delete/:_id", isloggedin, async (req, res) => {
   let id = req.params._id;
   let user = await medicalInfo.findByIdAndDelete(id);
@@ -139,24 +142,27 @@ app.get("/delete/:_id", isloggedin, async (req, res) => {
 });
 
 app.post("/addMember", isloggedin, async (req, res) => {
-  const { name, age, gender, phoneNumber, email } = req.body;
+  const { name, proxy, age, gender, phoneNumber, email } = req.body;
   let userId = (req.user = jwt.verify(
     req.cookies.token,
     process.env.JWT_SECRET
   ));
   const user = await userModel.findById(userId.id).select("-password");
+
   const member = await memberModel.create({
     user: user._id,
     name,
+    proxy,
     age,
     gender,
     phoneNumber,
     email,
   });
+
   res.redirect("/home");
 });
 
-// Logout
+//---------------------------------------------- Logout
 app.get("/logout", (req, res) => {
   res.clearCookie("token");
   res.redirect("/login");
