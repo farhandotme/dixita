@@ -3,73 +3,195 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Medox</title>
+    <title>Medox - Front Page</title>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
+      /* General Body Styling */
       body {
         font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        background-color: #2c3e50; /* Dark gray-blue color */
+        color: #ecf0f1; /* Light text color */
+      }
+
+      /* Navbar Styling */
+      nav {
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
-        height: 100vh;
-      }
-
-      .container {
-        text-align: center;
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
-
-      .banner {
-        width: 100%;
-        max-width: 600px;
-        height: auto;
-        margin-bottom: 20px;
-      }
-
-      h1 {
-        font-size: 2rem;
-        color: black;
-        margin-bottom: 20px;
-      }
-
-      .buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      button {
+        background-color: #34495e;
         padding: 10px 20px;
-        font-size: 1rem;
-        color: white;
-        background-color: #007bff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       }
 
-      button:hover {
-        background-color: #0056b3;
+      nav .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #ecf0f1;
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav ul li {
+        margin: 0 10px;
+      }
+
+      nav ul li a {
+        color: #ecf0f1;
+        text-decoration: none;
+        font-size: 18px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      nav ul li a:hover {
+        background-color: #1abc9c;
+      }
+
+      /* Main Section */
+      main {
+        text-align: center;
+        margin: 50px 20px;
+      }
+
+      main .highlight {
+        color: #1abc9c;
+        font-weight: bold;
+      }
+
+      /* Footer Section */
+      footer {
+        background-color: #34495e;
+        padding: 20px;
+        text-align: center;
+      }
+
+      footer h2 {
+        margin-bottom: 10px;
+        color: #1abc9c;
+      }
+
+      footer p {
+        margin-bottom: 30px;
+      }
+
+      /* Footer Images - Boxes */
+      .footer-images {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap; /* Ensures responsiveness */
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .box {
+        background-color: #2c3e50;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        width: 300px;
+        text-align: center;
+      }
+
+      .box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+      }
+
+      .box img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover; /* Ensures uniform image size */
+      }
+
+      .box h3 {
+        margin: 15px 0;
+        color: #1abc9c;
+      }
+
+      .box p {
+        margin: 0 10px 15px;
+        color: #bdc3c7;
+      }
+      .medox-info {
+        background-color: #34495e; /* Dark background */
+        color: #ecf0f1; /* Light text color */
+        padding: 20px;
+        border-radius: 10px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        margin: 40px auto;
+        max-width: 800px; /* Restrict width for better presentation */
+        text-align: center;
+      }
+
+      .medox-info p {
+        font-size: 16px;
+        line-height: 1.6;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <img src="/images/Designer.png" alt="Medox Banner Image" class="banner" />
-      <h1>Welcome to Medox</h1>
-      <div class="buttons">
-        <button onclick="window.location.href='/register'">Register</button>
-        <button onclick="window.location.href='/login'">Login</button>
+    <!-- Navbar -->
+    <nav>
+      <div class="logo">Medox</div>
+      <ul>
+        <li><a href="/login">Log In</a></li>
+        <li><a href="/register">Register</a></li>
+      </ul>
+    </nav>
+
+    <!-- Body Section -->
+    <main>
+      <h1>Welcome to <span class="highlight">Medox</span>!</h1>
+      <p>Your companion in managing medications effectively.</p>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        Our system simplifies medicine management for older people and their
+        families.
+      </p>
+      <div class="footer-images">
+        <div class="box">
+          <img src="images/Granny.jpeg" alt="Granny Taking Pills" />
+          <h3>Care for Yourself</h3>
+          <p>Manage your medications independently with ease using Medox.</p>
+        </div>
+        <div class="box">
+          <img src="images/granpa.jpeg" alt="Daughter Giving Medicine" />
+          <h3>Lighten the Load</h3>
+          <p>Effortlessly manage care schedules for your loved ones.</p>
+        </div>
+        <div class="box">
+          <img src="images/pills.jpeg" alt="Pills" />
+          <h3>Track Every Dose</h3>
+          <p>Stay on top of your medications with smart tracking features.</p>
+        </div>
       </div>
-    </div>
+      <h2>About Medox</h2>
+
+      <section class="medox-info">
+        <p>
+          Medox is a smart and user-friendly solution designed to make
+          medication management effortless and stress-free. Medox ensures that
+          older individuals can manage their medications independently,
+          promoting their confidence and well-being. For caregivers, it reduces
+          the mental burden of keeping track of multiple prescriptions, offering
+          a centralized platform that simplifies schedules and avoids errors.
+          Medox is not just a tool—it's a companion that brings peace of mind,
+          health, and harmony to families.
+        </p>
+      </section>
+
+      <p>&copy; Medicine management system by Dixita 2024</p>
+    </footer>
   </body>
 </html>

@@ -159,7 +159,6 @@ app.post("/memberMedication", isloggedin, async (req, res) => {
     // Find the member and update their medicalInfo
     const member = await memberModel.findById(memberId);
     if (!member) {
-      req.flash("error", "Member not found");
       return res.redirect(req.get("Referer") || "/home");
     }
 
@@ -241,7 +240,6 @@ app.get("/membersProfile/:_id", isloggedin, async (req, res) => {
 app.get("/deleteMember/:_id", isloggedin, async (req, res) => {
   const id = req.params._id;
   if (await memberModel.findByIdAndDelete(id)) {
-    req.flash("success", "Member deleted successfully");
     res.redirect("/home");
   } else {
     res.redirect(req.get("Referer") || "/home");
